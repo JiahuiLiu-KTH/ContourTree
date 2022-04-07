@@ -8,14 +8,15 @@
 #include <numeric>
 #include <vector>
 #include <set>
+#include <unordered_set>
 #include "mesh.h"
 #include "unionFind.h"
 
 struct node {
     int id;
     double val;
-    std::set<struct node *> parents;
-    std::set<struct node *> children;
+    std::unordered_set<struct node *> parents;
+    std::unordered_set<struct node *> children;
 
 public:
     int getNumParent() const {

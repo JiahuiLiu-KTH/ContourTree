@@ -85,14 +85,17 @@ void mergeTree::printJoinTree() {
     for (int i = 0; i < augmentedJoinTree.size(); ++i) {
         printf("ID: %2d, Value: %3.0f\n", augmentedJoinTree[i].id, augmentedJoinTree[i].val);
         printf("number of parents: %d, number of children: %d\n", augmentedJoinTree[i].parents.size(), augmentedJoinTree[i].children.size());
-//        for (int j = 0; j < augmentedJoinTree[i].parents.size(); ++j) {
-//            std::cout << "parent" << std::endl;
-//            printf("parent id: %2d, value :%3.0f\n", augmentedJoinTree[i].parents[j]->id, augmentedJoinTree[i].parents[j]->val);
-//        }
-//        for (int j = 0; j < augmentedJoinTree[i].children.size(); ++j) {
-//            std::cout << "child" << std::endl;
-//            printf("parent id: %2d, value :%3.0f\n", augmentedJoinTree[i].children[j]->id, augmentedJoinTree[i].children[j]->val);
-//        }
-        std::cout << "--------------------------------" << std::endl;
+
+        printf("parents:\n");
+        for (auto v : augmentedJoinTree[i].parents) {
+            printf("id: %d, value:%3.0f|", v->id, v->val);
+        }
+
+        printf("\nchildren:\n");
+        for (auto v : augmentedJoinTree[i].children) {
+            printf("id: %d, value:%3.0f|", v->id, v->val);
+        }
+
+        std::cout << "\n--------------------------------" << std::endl;
     }
 }
