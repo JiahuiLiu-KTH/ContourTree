@@ -90,6 +90,12 @@ build CMakeFiles/contourTree.dir/mesh.cpp.o: CXX_COMPILER__contourTree_Debug /ho
   OBJECT_DIR = CMakeFiles/contourTree.dir
   OBJECT_FILE_DIR = CMakeFiles/contourTree.dir
 
+build CMakeFiles/contourTree.dir/unionFind.cpp.o: CXX_COMPILER__contourTree_Debug /home/jiahui/contourTree/unionFind.cpp || cmake_object_order_depends_target_contourTree
+  DEP_FILE = CMakeFiles/contourTree.dir/unionFind.cpp.o.d
+  FLAGS = -g -std=gnu++1z
+  OBJECT_DIR = CMakeFiles/contourTree.dir
+  OBJECT_FILE_DIR = CMakeFiles/contourTree.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target contourTree
@@ -98,7 +104,7 @@ build CMakeFiles/contourTree.dir/mesh.cpp.o: CXX_COMPILER__contourTree_Debug /ho
 #############################################
 # Link the executable contourTree
 
-build contourTree: CXX_EXECUTABLE_LINKER__contourTree_Debug CMakeFiles/contourTree.dir/main.cpp.o CMakeFiles/contourTree.dir/mergeTree.cpp.o CMakeFiles/contourTree.dir/mesh.cpp.o
+build contourTree: CXX_EXECUTABLE_LINKER__contourTree_Debug CMakeFiles/contourTree.dir/main.cpp.o CMakeFiles/contourTree.dir/mergeTree.cpp.o CMakeFiles/contourTree.dir/mesh.cpp.o CMakeFiles/contourTree.dir/unionFind.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/contourTree.dir
   POST_BUILD = :

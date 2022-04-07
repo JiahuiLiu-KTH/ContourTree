@@ -7,12 +7,15 @@
 
 #include <numeric>
 #include <vector>
+#include <set>
 #include "mesh.h"
+#include "unionFind.h"
 
 struct node {
     int id;
-    std::vector<struct node *> parents;
-    std::vector<struct node *> children;
+    double val;
+    std::set<struct node *> parents;
+    std::set<struct node *> children;
 
 public:
     int getNumParent() const {
@@ -24,11 +27,13 @@ public:
     }
 
     void addParent(struct node * parentNode) {
-        parents.push_back(parentNode);
+        if (parentNode->id == this->id) return;
+        parents.insert(parentNode);
     }
 
     void addChildren(struct node * childNode) {
-        children.push_back(childNode);
+        if (childNode->id == this->id) return;
+        children.insert(childNode);
     }
 };
 
@@ -38,9 +43,12 @@ public:
     mergeTree();
     mergeTree(mesh inputMesh);
     void computeJoinTree(mesh inputMesh);
+    static std::vector<int> sortIndex(const std::vector<double> val);
+    void addEdgeToJoinTree(int pId, int cId);
+    void printJoinTree();
 
 private:
-    struct node augmentedJoinTree;
+    std::vector<struct node> augmentedJoinTree;
 };
 
 
