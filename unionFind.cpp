@@ -6,7 +6,7 @@
 
 unionFind::unionFind(int size) {
     this->comp.resize(size);
-    std::iota(comp.begin(), comp.end(), 0);
+    std::fill(comp.begin(), comp.end(), -1);
 }
 
 int unionFind::find(int id) {
@@ -33,4 +33,12 @@ void unionFind::join(int cId, int pId) {
     int originalId2 = find(pId);
 
     comp[originalId1] = originalId2;
+}
+
+void unionFind::initialize() {
+    std::iota(comp.begin(), comp.end(), 0);
+}
+
+void unionFind::newComp(int id) {
+    comp[id] = id;
 }

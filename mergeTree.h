@@ -9,6 +9,7 @@
 #include <vector>
 #include <set>
 #include <unordered_set>
+#include <unordered_map>
 #include "mesh.h"
 #include "unionFind.h"
 
@@ -42,14 +43,26 @@ class mergeTree {
 
 public:
     mergeTree();
-    mergeTree(mesh inputMesh);
-    void computeJoinTree(mesh inputMesh);
+    mergeTree(const mesh& inputMesh);
+    void computeAugJoinTree(const mesh& inputMesh);
+    void computeJoinTree(const mesh& inputMesh);
+
     static std::vector<int> sortIndex(const std::vector<double> val);
     void addEdgeToJoinTree(int pId, int cId);
     void printJoinTree();
 
 private:
+    mesh inputMesh;
     std::vector<struct node> augmentedJoinTree;
+    std::unordered_map<int, struct node *> joinTree;
+
+    const int numNeighbour = 6;
+    const int neighbours[6][2] = {{-1, -1},
+                            {-1, 0},
+                            {0,  -1},
+                            {0,  1},
+                            {1,  0},
+                            {1,  1}};
 };
 
 

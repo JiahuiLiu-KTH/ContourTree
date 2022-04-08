@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include <numeric>
+#include <unordered_set>
 #include "mesh.h"
 #include "mergeTree.h"
 
@@ -28,16 +29,11 @@ void test() {
 //        std::cout << res[i] << " ";
 //    }
 //    std::cout << std::endl;
-    std::vector<int> a;
-    a.resize(10);
-    std::cout << a.size() << std::endl;
-
-    a[6] = 9;
-
-    for (int i = 0; i < a.size(); ++i) {
-        std::cout << a[i] << " ";
-    }
-    std::cout << std::endl;
+    std::unordered_set<int> uoset = {1,2,3,4};
+    auto rtn = uoset.insert(3);
+    std::cout << rtn.second << std::endl;
+    rtn = uoset.insert(6);
+    std::cout << rtn.second << std::endl;
 }
 
 int main() {
@@ -45,5 +41,6 @@ int main() {
     mesh testMesh("../data/example1.dat");
     mergeTree testMergeTree(testMesh);
     testMergeTree.printJoinTree();
+
     return 0;
 }

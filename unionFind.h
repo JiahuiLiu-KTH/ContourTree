@@ -11,6 +11,8 @@
 class unionFind {
 public:
     unionFind(int size);
+    void initialize();
+    void newComp(int id);
     int find(int id);
     void pathComp(int startId, int id);
     void join(int cId, int pId);
