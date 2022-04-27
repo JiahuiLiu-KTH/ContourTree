@@ -95,6 +95,7 @@ void mergeTree::computeJoinTree(const mesh& inputMesh) {
                 unionFind.newComp(idx);
                 for (int nei:neiComp) {
                     unionFind.join(nei, idx);
+
                     joinTree[nei]->addParent(newNode);
                     newNode->addChildren(joinTree[nei]);
                 }
@@ -182,4 +183,130 @@ void mergeTree::printJoinTree() {
 
         std::cout << "\n--------------------------------" << std::endl;
     }
+}
+
+double calculateHeight(const int id, const std::unordered_map<int, struct node *>& mergeTree) {
+    node* currentNode = mergeTree.at(id);
+    node* parent;
+    if (mergeTree.at(id)->parents.size() == 1){
+        parent = *mergeTree.at(id)->parents.begin();
+
+    } else {
+        std::cout << "ERROR: parents container size is not equal to 1!" << std::endl;
+        return -1;
+    }
+
+    return currentNode->val-parent->val;
+}
+
+std::unordered_map<int, struct node *> mergeTree::simplifyMergeTree(const std::unordered_map<int, struct node *> &mergeTree) {
+
+    struct nodeIdAndWeight {
+        int nodeId;
+        double weight;
+    };
+
+    auto simplifiedTree = copyTree(mergeTree);
+
+    // use inQueueCount to keep track of how many times does each node been insert in to the priority queue,
+    // so we can know if the popped item is valid.
+    std::unordered_map<int, int> inQueueCount;
+    for (auto node : simplifiedTree) {
+        inQueueCount.insert({node.first, 0});
+    }
+
+    // priority queue for prune the edge.
+    auto comp = [](nodeIdAndWeight a, nodeIdAndWeight b) {
+        return a.weight > b.weight;
+    };
+    std::priority_queue<nodeIdAndWeight, std::vector<nodeIdAndWeight>, decltype(comp)> pruneQueue(comp);
+
+    // plug any weight function to this.
+    double (*calculateWeight)(const int id, const std::unordered_map<int, struct node *>& mergeTree);
+    calculateWeight = &calculateHeight;
+
+    // find all leaf nodes and put them into the prune queue
+    for(auto p : simplifiedTree) {
+        if(p.second->children.empty()) { // if this node does not have children
+            nodeIdAndWeight newNIW{p.first, calculateWeight(p.first, simplifiedTree)};
+            pruneQueue.push(newNIW);
+            inQueueCount[p.first] ++;
+        }
+    }
+
+    // main loop
+    while (pruneQueue.size() > 1) {
+        int id = pruneQueue.top().nodeId;
+        pruneQueue.pop();
+        inQueueCount[id]--;
+        if (inQueueCount[id] == 0) { // if this item is valid
+            int changedNodeId = prune(id, simplifiedTree);
+
+            // if we have a collapsed node and the node is a leaf node
+            if (changedNodeId >= 0 && simplifiedTree[changedNodeId]->children.empty()) {
+                nodeIdAndWeight newNIW{changedNodeId, calculateWeight(changedNodeId, simplifiedTree)};
+                pruneQueue.push(newNIW);
+                inQueueCount[changedNodeId]++;
+            }
+
+        }
+    }
+
+    return simplifiedTree;
+}
+
+std::unordered_map<int, node *> mergeTree::copyTree(std::unordered_map<int, node *> mergeTree) {
+    std::unordered_map<int, node *> newTree;
+    for(auto p : mergeTree) {
+        node * newNode = new node();
+        newNode->id = p.first;
+        newNode->val = p.second->val;
+        newTree.insert({p.first, newNode});
+    }
+
+    for(auto p : mergeTree) {
+        auto node = newTree[p.first];
+        for(auto parent : p.second->parents) {
+            node->addParent(newTree[parent->id]);
+        }
+        for(auto child : p.second->children) {
+            node->addChildren(newTree[child->id]);
+        }
+    }
+
+    return newTree;
+}
+
+int mergeTree::prune(int nodeId, std::unordered_map<int, struct node *> &mergeTree) {
+    int changedNodeId = -1;
+    auto currentNode = mergeTree[nodeId];
+    auto parentNode = *currentNode->parents.begin();
+
+    parentNode->children.erase(currentNode);
+    mergeTree.erase(nodeId);
+    delete currentNode;
+
+    // if there is only one child left on the parent node,
+    // link the child node and grandparent node and delete the parent node.
+    if (parentNode->children.size() == 1) {
+        auto grandparentNode = *parentNode->parents.begin();
+        auto childNode =*parentNode->children.begin();
+
+        childNode->addParent(grandparentNode);
+        childNode->parents.erase(parentNode);
+        grandparentNode->addChildren(childNode);
+        grandparentNode->children.erase(parentNode);
+
+        mergeTree.erase(parentNode->id);
+        delete parentNode;
+
+        changedNodeId = childNode->id;
+    }
+
+
+    return changedNodeId;
+}
+
+void mergeTree::test() {
+    auto a = simplifyMergeTree(this->joinTree);
 }

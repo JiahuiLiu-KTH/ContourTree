@@ -10,6 +10,7 @@
 #include <set>
 #include <unordered_set>
 #include <unordered_map>
+#include <queue>
 #include "mesh.h"
 #include "unionFind.h"
 
@@ -46,10 +47,14 @@ public:
     mergeTree(const mesh& inputMesh);
     void computeAugJoinTree(const mesh& inputMesh);
     void computeJoinTree(const mesh& inputMesh);
+    std::unordered_map<int, struct node *> simplifyMergeTree(const std::unordered_map<int, struct node *>& mergeTree);
+    int prune(int nodeId, std::unordered_map<int, struct node *>& mergeTree);
 
     static std::vector<int> sortIndex(const std::vector<double> val);
     void addEdgeToJoinTree(int pId, int cId);
     void printJoinTree();
+    void test();
+    std::unordered_map<int, node *> copyTree(std::unordered_map<int, node *> mergeTree);
 
 private:
     mesh inputMesh;
