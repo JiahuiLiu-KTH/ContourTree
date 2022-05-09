@@ -71,12 +71,31 @@ void test2() {
     }
 }
 
+template <class T>
+T getMax(T a, T b) {
+    T result;
+    result = (a > b)? a:b;
+    return result;
+}
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    mesh testMesh("../data/example1.dat");
-    mergeTree testMergeTree(testMesh);
-    testMergeTree.test();
-    testMergeTree.printJoinTree();
+//    std::cout << "---------------------" << std::endl;
+//    mesh testMesh("../data/example1.dat");
+//    mergeTree testMergeTree(testMesh);
+//    testMergeTree.test();
+//    testMergeTree.printJoinTree();
+
+    int* p = new int[3];
+    *(p + 0) = 1;
+    *(p + 1) = 2;
+    *(p + 2) = 3;
+
+    std::vector<int> a(p,p+3);
+
+    std::cout << a.size() << std::endl << std::endl;
+    for (int i = 0; i < a.size(); ++i) {
+        std::cout << a[i] <<std::endl;
+    }
 
     return 0;
 }

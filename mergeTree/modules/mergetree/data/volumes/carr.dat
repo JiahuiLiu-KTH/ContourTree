@@ -1,0 +1,6 @@
+RawFile: carr.raw
+Resolution: 8 9 1
+Format: FLOAT32
+BasisVector1: 8 0.0 0.0
+BasisVector2: 0.0 9 0.0
+BasisVector3: 0.0 0.0 1

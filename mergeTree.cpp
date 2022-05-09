@@ -51,6 +51,7 @@ void mergeTree::computeJoinTree(const mesh& inputMesh) {
                 neiComp.insert(u);
             }
         }
+
         int numNeiComp = neiComp.size();
         switch (numNeiComp) {
             case 0:
@@ -309,4 +310,18 @@ int mergeTree::prune(int nodeId, std::unordered_map<int, struct node *> &mergeTr
 
 void mergeTree::test() {
     auto a = simplifyMergeTree(this->joinTree);
+    for(auto p : a) {
+        std::cout << "Node value: " << p.second->val << std::endl;
+        std::cout << "Number of parents: " << p.second->parents.size() << std::endl;
+        for(auto par : p.second->parents){
+            std::cout << par->val << " ";
+        }
+        std::cout << std::endl;
+        std::cout << "Number of children: " << p.second->children.size() << std::endl;
+        for(auto par : p.second->children){
+            std::cout << par->val << " ";
+        }
+        std::cout << std::endl;
+        std::cout << "---------------------" << std::endl;
+    }
 }
